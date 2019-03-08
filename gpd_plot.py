@@ -77,7 +77,7 @@ def build_plot_values(gdpinfo, gdpdata):
         if (year_isint) and (gdp_isfloat):
             gdp1 = float(gdp)
             year1 = int(year)
-            if (gdp1 >= 0) and (year1 >= minyear) and (year1 <= maxyear):
+            if (gdp1 >= 0) and (maxyear >= year1 >= minyear):
                 data.append((year1, gdp1))
 
     return data
@@ -97,7 +97,24 @@ def build_plot_dict(gdpinfo, country_list):
       CSV file should still be in the output dictionary, but
       with an empty XY plot value list.
     """
-    return {}
+    plot_dict = {}
+
+    #gdpdata_dict is a dict of dicts. The outer dict maps country name to the
+    #row of that country. Inner dict maps column name to value
+    gdpdata_dict = read_csv_as_nested_dict(gdpinfo["gdpfile"], gdpinfo["country_name"],
+                                            gdpinfo["separator"], gdpinfo["quote"])
+
+    #plot_dict is a dict that maps country to gdp_plot
+    for country in country_list:
+        if country in gdpdata_dict:
+            #gdp_plot is a dict that maps year to gdp of the country specified
+            gdp_plot = build_plot_values(gdpinfo, gdpdata_dict[country])
+            gdp_plot.sort()
+            plot_dict[country] = gdp_plot
+        else:
+            plot_dict[country] = []
+
+    return plot_dict
 
 
 def render_xy_plot(gdpinfo, country_list, plot_file):
@@ -115,7 +132,18 @@ def render_xy_plot(gdpinfo, country_list, plot_file):
       specified by gdpinfo for the countries in country_list.
       The image will be stored in a file named by plot_file.
     """
-    return
+    plot_dict = build_plot_dict(gdpinfo, country_list)
+
+    gdp_chart = pygal.XY()
+    gdp_chart.title = 'Plot of GDP for select countries spanning 1960 to 2015'
+    gdp_chart.x_title = 'Year'
+    gdp_chart.y_title= 'GDP in current US dollars'
+
+    for country in country_list:
+        gdp_chart.add(country, plot_dict[country])
+
+    #gdp_chart.render_in_browser()
+    gdp_chart.render_to_file(plot_file)
 
 
 def test_render_xy_plot():
@@ -142,4 +170,4 @@ def test_render_xy_plot():
 # Make sure the following call to test_render_xy_plot is commented out
 # when submitting to OwlTest/CourseraTest.
 
-# test_render_xy_plot()
+#test_render_xy_plot()
