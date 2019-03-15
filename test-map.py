@@ -97,3 +97,7 @@ def draw_cancer_risk_map(joined_csv_file_name,map_name,num_counties=0):
         map = draw_USA_map(map_name, csv_file)
 
 draw_cancer_risk_map("cancer_risk_joined.csv","USA_Counties_1000x634.png", 20)
+#tests
+#draw_cancer_risk_map("cancer_risk_joined.csv","USA_Counties_1000x634.png", 20)
+#draw_cancer_risk_map("cancer_risk_joined.csv","USA_Counties_1000x634.png", 100)
+draw_cancer_risk_map("cancer_risk_joined.csv","USA_Counties_1000x634.png")
