@@ -60,3 +60,29 @@ def read_csv_file(file_name):
         for row in csv_reader:
             csv_table.append(row)
     return csv_table
+
+
+def draw_cancer_risk_map(joined_csv_file_name,map_name,num_counties=0):
+    """
+     Takes the name of a CSV file and the name of the USA map and draws a scatter plot
+      with scatter points of fixed size and color at the center of the num_counties
+      counties with highest cancer risk.
+      Omitting the final optional argument num_counties
+      should default to drawing all counties.
+    """
+
+    csv_file = read_csv_file(joined_csv_file_name)
+
+    #sort table by cancer risk
+    csv_file.sort(key=lambda row: float(row[4]), reverse=True)
+
+    #plot map
+    if num_counties != 0:
+        trim_table = csv_file[0:num_counties]
+        for row in trim_table:
+            print(row)
+        map = draw_USA_map(map_name, trim_table)
+    else:
+        map = draw_USA_map(map_name, csv_file)
+
+draw_cancer_risk_map("cancer_risk_joined.csv","USA_Counties_1000x634.png", 20)
