@@ -4,6 +4,7 @@ Load a county-level PNG map of the USA and draw it using matplotlib
 """
 
 import matplotlib.pyplot as plt
+import csv
 
 # Houston location
 
@@ -46,3 +47,16 @@ def draw_USA_map(map_name):
 
 #draw_USA_map("USA_Counties_555x352.png")
 draw_USA_map("USA_Counties_1000x634.png")
+def read_csv_file(file_name):
+    """
+    Given a CSV file, read the data into a nested list
+    Input: String corresponding to comma-separated  CSV file
+    Output: Nested list consisting of the fields in the CSV file
+    """
+
+    with open(file_name, newline='') as csv_file:       # don't need to explicitly close the file now
+        csv_table = []
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+            csv_table.append(row)
+    return csv_table
