@@ -11,7 +11,18 @@ import csv
 USA_SVG_SIZE = [555, 352]
 HOUSTON_POS = [270, 260]
 
-def draw_USA_map(map_name):
+def compute_county_cirle(county_population):
+    """
+    Takes a number as an input, that represents the population of a county
+    and return a scaled number so it can be taken as the point size for a
+    scatter plot
+    """
+
+    rescaled = county_population / 100000
+    return rescaled
+
+
+def draw_USA_map(map_name, table):
     """
     Given the name of a PNG map of the USA (specified as a string),
     draw this map using matplotlib
