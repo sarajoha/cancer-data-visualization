@@ -29,6 +29,13 @@ def draw_USA_map(map_name):
 
     # Plot green scatter point in center of map
     plt.scatter(x = xpixels/2, y = ypixels/2, c='green')
+    #iterates through the table and scatters x and y coordinates
+    for row in table:
+        x_coord = float(row[5])
+        y_coord = float(row[6])
+        x_resize = (x_coord * xpixels) / USA_SVG_SIZE[0] #reescale for larger png
+        y_resize = (y_coord * ypixels) / USA_SVG_SIZE[1]
+        plt.scatter(x = x_resize, y = y_resize, s=1, c='blue')
 
     # Plot red scatter point on Houston, Tx - include code that rescale coordinates for larger PNG files
     x_resize = (HOUSTON_POS[0] * xpixels) / USA_SVG_SIZE[0]
