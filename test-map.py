@@ -54,6 +54,14 @@ def draw_USA_map(map_name, table):
 
     # Plot green scatter point in center of map
     plt.scatter(x = xpixels/2, y = ypixels/2, c='green')
+    #Make lists of the data to ploy
+    cancer_risk = [float(row[4]) for row in table]
+    x_coords = [(float(row[5]) * xpixels) / USA_SVG_SIZE[0] for row in table]
+    y_coords = [(float(row[6]) * ypixels) / USA_SVG_SIZE[1] for row in table]
+    population = [compute_county_cirle(int(row[3])) for row in table]
+    cmap = create_riskmap()
+
+
     #iterates through the table and scatters x and y coordinates
     for row in table:
         x_coord = float(row[5])
