@@ -21,6 +21,19 @@ def compute_county_cirle(county_population):
     rescaled = county_population / 100000
     return rescaled
 
+def create_riskmap(colormap=mpl.cm.jet):
+    """
+     Takes a colormap from the module matplotlib.cm module and returns a
+     function that maps a cancer risk to an RGB value from the given colormap.
+    """
+    #norm = colors.LogNorm(vmin=table[-1][4], vmax=table[0][4])
+    #norm = colors.LogNorm()
+    #scalar = sm(norm=norm, cmap=cm.jet)
+    #rbg = sm.to_rgba()
+
+    return lambda x: mpl.cm.ScalarMappable(norm=colors.LogNorm(vmin=min(x), vmax=max(x)),
+                                            cmap=colormap).to_rgba(x)
+
 
 def draw_USA_map(map_name, table):
     """
