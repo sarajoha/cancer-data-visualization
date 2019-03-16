@@ -54,30 +54,18 @@ def draw_USA_map(map_name, table):
     # Plot USA map
     map_image = plt.imshow(map)
 
-    #Make lists of the data to ploy
+    #Make lists of the data to plot
     cancer_risk = [float(row[4]) for row in table]
     x_coords = [(float(row[5]) * xpixels) / USA_SVG_SIZE[0] for row in table]
     y_coords = [(float(row[6]) * ypixels) / USA_SVG_SIZE[1] for row in table]
     population = [compute_county_cirle(int(row[3])) for row in table]
+
+    #plot data in a scatter plot
     cmap = create_riskmap()
+    plt.scatter(x = x_coords, y = y_coords, s=population, c=cmap(cancer_risk))
 
-
-    #iterates through the table and scatters x and y coordinates
-    #for row in table:
-    #    x_coord = float(row[5])
-    #    y_coord = float(row[6])
-    #    x_resize = (float(row[5]) * xpixels) / USA_SVG_SIZE[0] #reescale for larger png
-    #    y_resize = (y_coord * ypixels) / USA_SVG_SIZE[1]
-        #population = int(row[3])
-        #c_risk = float(row[4])
-        #c_risk = math.log(c_risk, 10) #log del cancer risk and add to list
-        #cancer_risk.append(c_risk)
-        #cmap = create_riskmap()
-    plt.scatter(x = x_coords, y = y_coords, s=population,
-                c=cmap(cancer_risk)) #rgb (colormap) takes an array as input, so do it outside the loop
-
-    #cmap = create_riskmap() #c=cmap(cancer_risk)
     plt.show()
+    #plt.savefig("map.png")
 
 
 #draw_USA_map("USA_Counties_555x352.png")
