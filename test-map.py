@@ -4,6 +4,9 @@ Load a county-level PNG map of the USA and draw it using matplotlib
 """
 
 import matplotlib.pyplot as plt
+import matplotlib.colors as colors
+import matplotlib as mpl
+import math
 import csv
 
 # Houston location
@@ -18,7 +21,7 @@ def compute_county_cirle(county_population):
     scatter plot
     """
 
-    rescaled = county_population / 100000
+    rescaled = county_population / 10000
     return rescaled
 
 def create_riskmap(colormap=mpl.cm.jet):
@@ -47,13 +50,10 @@ def draw_USA_map(map_name, table):
 
     #  Get dimensions of USA map image
     ypixels, xpixels, bands = map.shape
-    #print(xpixels, ypixels, bands)
 
     # Plot USA map
     map_image = plt.imshow(map)
 
-    # Plot green scatter point in center of map
-    plt.scatter(x = xpixels/2, y = ypixels/2, c='green')
     #Make lists of the data to ploy
     cancer_risk = [float(row[4]) for row in table]
     x_coords = [(float(row[5]) * xpixels) / USA_SVG_SIZE[0] for row in table]
@@ -63,22 +63,26 @@ def draw_USA_map(map_name, table):
 
 
     #iterates through the table and scatters x and y coordinates
-    for row in table:
-        x_coord = float(row[5])
-        y_coord = float(row[6])
-        x_resize = (x_coord * xpixels) / USA_SVG_SIZE[0] #reescale for larger png
-        y_resize = (y_coord * ypixels) / USA_SVG_SIZE[1]
-        plt.scatter(x = x_resize, y = y_resize, s=1, c='blue')
+    #for row in table:
+    #    x_coord = float(row[5])
+    #    y_coord = float(row[6])
+    #    x_resize = (float(row[5]) * xpixels) / USA_SVG_SIZE[0] #reescale for larger png
+    #    y_resize = (y_coord * ypixels) / USA_SVG_SIZE[1]
+        #population = int(row[3])
+        #c_risk = float(row[4])
+        #c_risk = math.log(c_risk, 10) #log del cancer risk and add to list
+        #cancer_risk.append(c_risk)
+        #cmap = create_riskmap()
+    plt.scatter(x = x_coords, y = y_coords, s=population,
+                c=cmap(cancer_risk)) #rgb (colormap) takes an array as input, so do it outside the loop
 
-    # Plot red scatter point on Houston, Tx - include code that rescale coordinates for larger PNG files
-    x_resize = (HOUSTON_POS[0] * xpixels) / USA_SVG_SIZE[0]
-    y_resize = (HOUSTON_POS[1] * ypixels) / USA_SVG_SIZE[1]
-    plt.scatter(x = x_resize, y = y_resize, s = 100, c='red')
+    #cmap = create_riskmap() #c=cmap(cancer_risk)
     plt.show()
 
 
 #draw_USA_map("USA_Counties_555x352.png")
-draw_USA_map("USA_Counties_1000x634.png")
+#draw_USA_map("USA_Counties_1000x634.png")
+
 def read_csv_file(file_name):
     """
     Given a CSV file, read the data into a nested list
@@ -111,13 +115,10 @@ def draw_cancer_risk_map(joined_csv_file_name,map_name,num_counties=0):
     #plot map
     if num_counties != 0:
         trim_table = csv_file[0:num_counties]
-        for row in trim_table:
-            print(row)
         map = draw_USA_map(map_name, trim_table)
     else:
         map = draw_USA_map(map_name, csv_file)
 
-draw_cancer_risk_map("cancer_risk_joined.csv","USA_Counties_1000x634.png", 20)
 #tests
 #draw_cancer_risk_map("cancer_risk_joined.csv","USA_Counties_1000x634.png", 20)
 #draw_cancer_risk_map("cancer_risk_joined.csv","USA_Counties_1000x634.png", 100)
